@@ -14,9 +14,9 @@ spark = glueContext.spark_session
 job = Job(glueContext)
 
 # --- Define S3 Paths (Updated with your new names) ---
-s3_input_path = "s3://handsonfinallanding/"
-s3_processed_path = "s3://handsonfinalprocessed/processed-data/"
-s3_analytics_path = "s3://handsonfinalprocessed/Athena Results/"
+s3_input_path = "s3://handsonfinallanding-ramnarayanan/"
+s3_processed_path = "s3://handsonfinalprocessed-ramnarayanan/processed-data/"
+s3_analytics_path = "s3://handsonfinalprocessed-ramnarayanan/Athena Results/"
 
 # --- Read the data from the S3 landing zone ---
 dynamic_frame = glueContext.create_dynamic_frame.from_options(
@@ -82,10 +82,78 @@ glueContext.write_dynamic_frame.from_options(
     format="csv"
 )
 
-# Write the spark queries for following:
 # 2. Date wise review count: his query calculates the total number of reviews submitted per day.
-# 3. Top 5 Most Active Customers: This query identifies your "power users" by finding the customers who have submitted the most reviews.
-# 4. Overall Rating Distribution: This query shows the count for each star rating (1-star, 2-star, etc.)
+print("Running Query 2: Date-wise Review Count...")
+df_analytics_2 = spark.sql("""
+    SELECT 
+        review_date, 
+        COUNT(*) as daily_review_count
+    FROM product_reviews
+    WHERE review_date IS NOT NULL
+    GROUP BY review_date
+    ORDER BY review_date ASC
+""")
 
+# Write Query 2 result
+query2_path = s3_analytics_path + "daily_review_trends/"
+print(f"Writing Query 2 results to {query2_path}...")
+analytics_result_2_frame = DynamicFrame.fromDF(df_analytics_2.repartition(1), glueContext, "analytics_df_2")
+glueContext.write_dynamic_frame.from_options(
+    frame=analytics_result_2_frame,
+    connection_type="s3",
+    connection_options={"path": query2_path},
+    format="csv"
+)
+
+# 3. Top 5 Most Active Customers: This query identifies your "power users" by finding the customers who have submitted the most reviews.
+print("Running Query 3: Top 5 Most Active Customers...")
+df_analytics_3 = spark.sql("""
+    SELECT 
+        customer_id, 
+        COUNT(*) as total_reviews_submitted
+    FROM product_reviews
+    -- Exclude anonymous users from the 'Top Customers' list
+    WHERE customer_id != 'ANONYMOUS_USER'
+    GROUP BY customer_id
+    ORDER BY total_reviews_submitted DESC
+    LIMIT 5
+""")
+
+# Write Query 3 result
+query3_path = s3_analytics_path + "top_active_customers/"
+print(f"Writing Query 3 results to {query3_path}...")
+analytics_result_3_frame = DynamicFrame.fromDF(df_analytics_3.repartition(1), glueContext, "analytics_df_3")
+glueContext.write_dynamic_frame.from_options(
+    frame=analytics_result_3_frame,
+    connection_type="s3",
+    connection_options={"path": query3_path},
+    format="csv"
+)
+
+# 4. Overall Rating Distribution: This query shows the count for each star rating (1-star, 2-star, etc.)
+print("Running Query 4: Overall Rating Distribution...")
+df_analytics_4 = spark.sql("""
+    SELECT 
+        rating, 
+        COUNT(*) as rating_count,
+        -- Calculate percentage of total reviews (Optional, but useful)
+        (COUNT(*) * 100.0 / (SELECT COUNT(*) FROM product_reviews WHERE rating > 0)) as percentage
+    FROM product_reviews
+    -- Filter out the 0s we used to fill NULLs, as they aren't real ratings
+    WHERE rating >= 1 AND rating <= 5
+    GROUP BY rating
+    ORDER BY rating ASC
+""")
+
+# Write Query 4 result
+query4_path = s3_analytics_path + "rating_distribution/"
+print(f"Writing Query 4 results to {query4_path}...")
+analytics_result_4_frame = DynamicFrame.fromDF(df_analytics_4.repartition(1), glueContext, "analytics_df_4")
+glueContext.write_dynamic_frame.from_options(
+    frame=analytics_result_4_frame,
+    connection_type="s3",
+    connection_options={"path": query4_path},
+    format="csv"
+)
 
 job.commit()

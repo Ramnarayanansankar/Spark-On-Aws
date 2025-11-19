@@ -62,10 +62,10 @@ This project demonstrates a **fully automated, event-driven serverless data pipe
 
 Create two S3 buckets with **globally unique names**:
 
-1. **Landing Bucket:** `phanindra-hands-on-final-landing`
+1. **Landing Bucket:** `handsonfinallanding-ramnarayanan`
    - Purpose: Receives raw CSV files
 
-2. **Processed Bucket:** `phanindra-hands-on-final-processed`
+2. **Processed Bucket:** `handsonfinalprocessed-ramnarayanan`
    - Purpose: Stores processed Parquet results
 
 ### Step 2: Create IAM Role for AWS Glue
