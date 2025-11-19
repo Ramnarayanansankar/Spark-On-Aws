@@ -169,19 +169,19 @@ Spark-on-AWS/
 ## 📊 Results and Screenshots
 
 ### Screenshot 1: Lambda Function Triggered
-<img width="780" height="620" alt="AWSLambdaOutputLogs" src="https://github.com/user-attachments/assets/9c873b93-6795-408d-9375-96cad80c95db" />
+<img width="1440" height="900" alt="Screenshot 1" src="https://github.com/user-attachments/assets/ae8f38f3-4e46-4b47-92d8-84131442b8eb" />
 
 ### Screenshot 2: Glue Job Script
-<img width="780" height="620" alt="AWSGlueScript" src="https://github.com/user-attachments/assets/fbb557f2-96fa-4587-b511-a9ee3ea4a2ff" />
+<img width="1440" height="900" alt="Screenshot 2" src="https://github.com/user-attachments/assets/c19fbccc-29a7-473b-8da8-16d4dc41e574" />
 
 ### Screenshot 3: Glue Job Completed Successfully
-<img width="780" height="620" alt="AWSGlueRun" src="https://github.com/user-attachments/assets/9ffb6976-52b2-49bd-95ed-061237303888" />
+<img width="1440" height="900" alt="Screenshot 3" src="https://github.com/user-attachments/assets/35f7dd08-a5c9-480c-a94b-5dad94501bf7" />
 
 ### Screenshot 4: Cloud Watch Logs
-<img width="780" height="620" alt="AWSCloudWatch" src="https://github.com/user-attachments/assets/c90b5fd5-c3a1-4358-b871-637ff0a6c2f6" />
+<img width="1440" height="899" alt="Screenshot 4" src="https://github.com/user-attachments/assets/df4e4d32-51a8-424b-9443-dc5693e67e67" />
 
 ### Screenshot 5: Output Parquet Files in S3
-<img width="780" height="620" alt="S3OutputFolderPitcure2" src="https://github.com/user-attachments/assets/648c23ab-4bb2-459f-8677-98d39215b0b3" />
+<img width="1440" height="900" alt="Screenshot 5" src="https://github.com/user-attachments/assets/3b3d4dad-67b1-42ce-94f6-8f63cad9a113" />
 
 ## 🎓 Approach and Methodology
 
